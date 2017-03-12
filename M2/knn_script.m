@@ -1,7 +1,7 @@
 clc; clear; close all;
 addpath dataSets\
 dataSets = {'DatosPesoEstatura' 'DatosGaussianas' 'DatosHRR'};
-load(dataSets{3});
+load(dataSets{1});
 %% 1º división
 % Dividirla base de datos en diseño (training) y test, desordenándolos
 % al azar. Establecemos 1000 para diseño y 1000 para test
@@ -31,6 +31,9 @@ end
 %% 4º Visualización
 figure
 plot(K, PerrorTest, 'sqk-')
+title('Evolución de la probabilidad de error con el aumento de k')
+xlabel('k')
+ylabel('P_{error}')
 % Para el mejor caso, visualizar:
 [~, bestK] = min(PerrorTest);
 [~, ClaseAsign] = knn( Design, Test, bestK);
