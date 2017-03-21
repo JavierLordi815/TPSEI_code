@@ -2,7 +2,7 @@ clc; clear; close all;
 addpath ..\dataSets\
 addpath ..\
 dataSets = {'DatosPesoEstatura' 'DatosGaussianas'};
-load(dataSets{3});
+load(dataSets{2});
 %% 1º división
 % Dividirla base de datos en diseño (training) y test, desordenándolos
 % al azar. Establecemos 1000 para diseño y 1000 para test

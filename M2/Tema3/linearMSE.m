@@ -1,4 +1,4 @@
-function [ PerrorTest, ClaseAsign ] = linearMSE( Design, Test )
+function [ PerrorTest, ClaseAsign, Y ] = linearMSE( Design, Test )
 %LINEARMSE Discriminante lineal de mínimos cuadrados
 %   Detailed explanation goes here
 [C, N_Design] = size(Design.T);

@@ -21,6 +21,8 @@ function [ PerrorTest, ClaseAsign ] = knn( Design, Test, k )
     % Calculo la clase predominante entre los vecinos (m) y si hay empate
     % (c) en cada patrón
     [m, ~, c] = mode(knnsClassif, 1);
+    % Posibilidad de hacerlo con hist y sumando 0.5 para deshacer empates a
+    % la clase del vecino más próximo
     if k ~= 1
         for i = 1:TestSize(2)
             if size(c{i}, 1) > 1 % Si hay empate

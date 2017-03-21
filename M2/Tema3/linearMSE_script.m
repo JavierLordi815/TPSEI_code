@@ -2,7 +2,7 @@ clc; clear; close all;
 addpath ..\dataSets\
 addpath ..\
 dataSets = {'DatosPesoEstatura' 'DatosGaussianas' 'DatosHRR'};
-load(dataSets{1});
+load(dataSets{2});
 %% 1º división
 % Dividirla base de datos en diseño (training) y test, desordenándolos
 % al azar. Establecemos 1000 para diseño y 1000 para test
@@ -19,8 +19,13 @@ Design.T = Data.T(:, ind(1:end/2));
 Test.P = Data.P(:, ind(end/2 + (1:end/2)));
 Test.T = Data.T(:, ind(end/2 + (1:end/2)));
 %% Ejecución del método
-[ PerrorTest, ClaseAsign ] = linearMSE( Design, Test );
+[ PerrorTest, ClaseAsign, Y ] = linearMSE( Design, Test );
 %% 4º Visualización
+figure
+stem3(Data.P(1, 1:end/2), Data.P(2, 1:end/2), Data.T(1, 1:end/2), 'r');
+hold on
+stem3(Data.P(1, end/2+1:end), Data.P(2, end/2+1:end), Data.T(1, end/2+1:end), 'b');
+plot3(Test.P(1, :), Test.P(2, :), Y(1, :), 'ok')
 figure
 plot(Test.P(1, logical(Test.T(1, :))), Test.P(2, logical(Test.T(1, :))), 'r.')
 hold on
