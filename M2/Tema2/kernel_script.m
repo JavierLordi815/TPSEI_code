@@ -1,10 +1,10 @@
 clc; clear; close all;
-addpath dataSets\
-dataSets = {'DatosPesoEstatura' 'DatosGaussianas' 'DatosHRR'};
-load(dataSets{3});
+addpath ..\dataSets\
+dataSets = {'DatosPesoEstatura' 'DatosGaussianas' 'DatosHRR', 'glassData2', 'Datosvehiculos'};
+load(dataSets{4});
 %% 1º división
-% Dividirla base de datos en diseño (training) y test, desordenándolos
-% al azar. Establecemos 1000 para diseño y 1000 para test
+% Porcentaje de datos para diseño/training
+percTr = 0.8;
 % Nº de componentes/características
 L = size(Data.P, 1);
 % Nº de patrones
@@ -12,26 +12,25 @@ N = size(Data.P, 2);
 % Nº de clases
 C = size(Data.T, 1);
 % Valores de k
-h = 0.7;
+h = 0.01:0.01:1;
 % Vector de errores
-% PerrorTest = zeros(1, hMax);
+PerrorTest = zeros(1, length(h));
 % Seleccionamos unos cuantos al azar
 [~, ind] = sort(rand(1, size(Data.P, 2)));
-Design.P = Data.P(:, ind(1:end/2));
-Design.T = Data.T(:, ind(1:end/2));
-Test.P = Data.P(:, ind(end/2 + (1:end/2)));
-Test.T = Data.T(:, ind(end/2 + (1:end/2)));
+Design.P = Data.P(:, ind(1:floor(end*percTr)));
+Design.T = Data.T(:, ind(1:floor(end*percTr)));
+Test.P = Data.P(:, ind(floor(end*percTr)+1:end));
+Test.T = Data.T(:, ind(floor(end*percTr)+1:end));
 %% Ejecución del método
-[ PerrorTest, ClaseAsign ] = kernel( Design, Test, h );
+parfor i = 1:length(h)
+    [ PerrorTest(i), ~ ] = kernel( Design, Test, h(i) );
+end
+% Obtengo la clase asignada pr el clasificador con menor error
+[~, ind] = min(PerrorTest);
+[~, ClaseAsign] = kernel( Design, Test, h(ind));
 %% 4º Visualización
 figure
-plot(Test.P(1, logical(Test.T(1, :))), Test.P(2, logical(Test.T(1, :))), 'r.')
-hold on
-plot(Test.P(1, logical(Test.T(2, :))), Test.P(2, logical(Test.T(2, :))), 'b.')
-title('Etiquetado real')
-figure
-plot(Test.P(1, ClaseAsign == 1), Test.P(2, ClaseAsign == 1), 'r.')
-hold on
-plot(Test.P(1, ClaseAsign == 2), Test.P(2, ClaseAsign == 2), 'b.')
-title('Etiquetado clasificador');
-
+plot(h, PerrorTest, 'sqk-')
+title('Evolución de la probabilidad de error con el aumento de h')
+xlabel('h')
+ylabel('P_{error}')

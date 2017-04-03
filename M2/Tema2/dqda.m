@@ -6,21 +6,18 @@ function [ PerrorTest, ClaseAsign ] = dqda( Design, Test )
 %   PerrorTest: Tasa de error del etiquetado obtenido frente al real
 %   ClaseAsign: Clase asignada a cada patrón por el método DLDA
 
-    %% 2º Diseño
-    % Calculamos la media de cada clase (a partir de diseño/training)
-    % Tipo de aproximación ('0' equivale a 'DLDA' y '1' a 'DQDA')
-    aprox_type = true;
     L = size(Design.P, 1);
     C = size(Design.T, 1);
+    % Calculamos la media de cada clase (a partir de diseño/training)
     media = calcMean(L, C, Design);
     % Calculamos la varianza de cada clase
-    varianza = calcVar(L, C, Design, aprox_type);
+    varianza = calcVar(L, C, Design,true);
     % Opcional: Calcular los coeficientes de las expresiones
-    coefs = calcCoefs(C, aprox_type, media, varianza);
+    coefs = calcCoefs(C,media, varianza,true);
     %% 3º Test
-    % Asignamos clases a cada persona de test.
-    ClaseAsign = bayesianClassifier(L, C, Test, aprox_type, coefs);
-    % Medir el error.
-    PerrorTest = calcError(ClaseAsign, Test.T);
+    % Asignamos la clase a cada patrón
+    ClaseAsign=bayesianClassifier(L,C,Test,coefs,true);
+    % Medida del error.
+    PerrorTest=calcError(ClaseAsign,Test.T);
 end
 

@@ -1,10 +1,17 @@
-function [ error ] = calcError( testNew, test )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
-    [~, testNew] = max(testNew);
-    [~, test] = max(test);
-    error = sum(testNew ~= test, 2) / size(test, 2);
+function [PerrorTest]=calcError(ClaseAsign,Test)
+%CALCERROR Función que calcula el error entre la clasificación y la clase
+%real de los patrones de prueba.
+%   ClaseAsign: Clase Asignada a cada patrón de test
+%   Test: Clase real de cada patrón de test
+%   PerrorTest: Probabilidad de error, obtenida del número de errores entre
+%   los dos valores anteriores.
     
-    %error = mean(testNew ~= test);
+    if min(size(ClaseAsign)) > 1
+        [~,ClaseAsign]=max(ClaseAsign);
+    end
+    if min(size(Test)) > 1
+        [~, Test] = max(Test);  
+    end
+    PerrorTest=mean(ClaseAsign~=Test);
 end
 
